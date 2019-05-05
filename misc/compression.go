@@ -18,9 +18,9 @@ func main() {
 
 	g := readFile(file)
 
-	d := returnHexASCII(g)
+	d := returnHexASCII(file)
 	a := returnBase64(d)
-	compressBase64(a)
+	compressBase64(g)
 }
 
 func readFile(file string) string {

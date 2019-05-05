@@ -2,7 +2,6 @@
 package main
 
 import (
-	"bytes"
 	"compress/gzip"
 	"encoding/base64"
 	"encoding/hex"
@@ -22,6 +21,11 @@ func main() {
 	l := returnBase64(k)
 
 	compressBase64(l)
+
+	returnHex()
+
+	returnHexFromBase64()
+
 }
 func pipe() {
 	// read and write with pipe
@@ -106,13 +110,42 @@ func returnBase64(s string) string {
 	fmt.Println("Fra ASCII til base64:", e)
 	fmt.Printf("Størrelse i byte for base64: %T, %d \n", e, unsafe.Sizeof(e))
 	fmt.Println("Lengden på stringen i base64:", r)
+	fmt.Println("")
 
 	return e
 }
 
+// Implementert etter å ha sett oversettelse fra de heksadesimalerepresentasjonen
+func returnHex() {
+	src := []byte("These word")
+	encodedStr := hex.EncodeToString(src)
+
+	fmt.Printf("%s\n", encodedStr)
+	fmt.Println("")
+}
+
+//Koder fra Base64 til ASCII til heks.
+func returnHexFromBase64() {
+	str := "VGhlc2Ugd29yZA=="
+	data, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		fmt.Println("error:", err)
+
+		return
+	}
+	fmt.Printf("%q\n", data)
+}
+
 func compressBase64(b64String string) {
-	var b bytes.Buffer
-	w := gzip.NewWriter(&b)
+
+	newFile, err := os.Create("compression.gz")
+	if err != nil {
+		fmt.Print(err)
+	}
+	w := gzip.NewWriter(newFile)
+
+	fmt.Println("Komprimerer nå til .gz")
+	fmt.Println("")
 
 	w.Write([]byte(b64String))
 
